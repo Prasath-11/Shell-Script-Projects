@@ -1,0 +1,105 @@
+COMMAND - [$(top -bn1 | grep "Cpu(s)" | sed "s/.*, *\([0-9.]*\)%* id.*/\1/" | awk '{print 100 - $1}')]
+Explaination :
+
+1, top -bn1
+
+top: This is a command-line tool used to display real-time information about processes and system resource usage (e.g., CPU, memory, load).
+-b: This flag tells top to run in batch mode, which is non-interactive and outputs the information in a format that is easier to parse.
+-n1: This flag specifies the number of iterations. -n1 means that top will run only once and then exit.
+
+2, grep "Cpu(s)"
+
+grep "Cpu(s)": This command filters the output from top to find the line that contains the string Cpu(s). This is the line that contains the CPU usage statistics, such as user, system, idle, and other CPU states.
+
+3, sed "s/.*, *\([0-9.]*\)%* id.*/\1/"
+
+sed: This is a stream editor used to perform text transformations.
+"s/.*, *\([0-9.]*\)%* id.*/\1/": This is a regular expression (regex) used to extract the idle CPU percentage.
+Let’s break it down:
+
+s/: This stands for substitution in sed. It's used to replace one part of a string with another. The general form of a substitution command in sed is:
+
+syntax - [s/old_pattern/new_pattern/]
+old_pattern: The part of the string that you want to search for (this can be a regular expression).
+new_pattern: The part you want to replace the old_pattern with.
+
+.*: Matches any characters (except newlines) from the start of the string up to the idle percentage. This matches everything before the 89.2 part.
+,*: Matches zero or more commas and spaces (there may be extra spaces after the comma in the top output).
+\([0-9.]*\): This part captures the idle CPU percentage into a group. The \( and \) are used to capture the value (which is 89.2 in our example). It matches a floating-point number (e.g., 89.2 or 100).
+%* id: Matches the % symbol and id (this is just part of the string indicating that the number is the idle percentage).
+\1 refers to the first capture group from the pattern (which is the idle percentage, e.g., 89.2).
+
+* sed searches the input for the pattern, and when it finds it, it replaces the entire matched line with just the value from the first capture group (the idle percentage).
+* So the line %Cpu(s): 8.0 us, 2.5 sy, 0.0 ni, 89.2 id, 0.0 wa, 0.0 hi, 0.2 si, 0.0 st becomes: 89.2
+
+4, awk '{print 100 - $1}'
+
+awk '{print 100 - $1}'
+awk: This is a powerful text processing tool used for pattern scanning and processing.
+{print 100 - $1}: This command calculates the active CPU usage by subtracting the idle CPU percentage (stored in $1) from 100.
+
+For example:
+If sed output 89.2, then awk calculates 100 - 89.2 = 10.8.(CPU Usage Percentage)
+
+====================================================================================================================================
+
+COMMAND - [$(free | grep Mem | awk '{print $3/$2 * 100.0}')]
+Explaination :
+
+1, free: The free command displays information about the system's memory usage, including total memory, used memory, free memory, and buffers/cache. The output typically looks like this:
+
+sample output:
+             total        used        free      shared  buff/cache   available
+Mem:          8000        3000        2000        1000        3000        5000
+Swap:         2048         512        1536
+The Mem: line contains memory statistics, with total, used, and free columns.
+Here’s the meaning of the columns:
+
+total: The total physical RAM in the system.
+used: The amount of memory currently being used.
+free: The amount of memory that is not in use.
+buff/cache: Memory used by the system for buffers and cache.
+available: Memory available for use by applications (including memory freed by cache).
+
+2, grep Mem: The grep command filters the output of free to show only the line containing the word Mem. This filters out other lines such as Swap or other memory-related stats.
+
+3, awk '{print $3/$2 * 100.0}':
+
+awk is a command-line tool for text processing. The part {print $3/$2 * 100.0} specifies what to print.
+In the context of the filtered free command output, $2 and $3 refer to the used memory and total memory columns, respectively.
+$3 is the used memory (in this case, 3000).
+$2 is the total memory (in this case, 8000).
+
+The command calculates the percentage of memory used:
+
+$3/$2 * 100.0
+This is the formula for calculating the memory usage percentage:
+The used memory ($3) is divided by the total memory ($2).
+This result is multiplied by 100.0 to convert it to a percentage.
+In the example, the calculation would be:
+
+(3000 / 8000) * 100.0 = 37.5(Used Memory percentage)
+
+====================================================================================================================================
+
+COMMAND - [bc -l]
+Explaination :
+
+The command bc -l is used to invoke bc, a command-line calculator, with the -l option for enabling math library functions. Let's break it down in detail:
+
+1, bc (Basic Calculator):
+bc is a command-line utility that acts as a calculator capable of performing basic and complex arithmetic operations. It supports floating-point arithmetic, which makes it more flexible than the standard shell arithmetic ($(( ... ))).
+
+2, The -l Option:
+The -l option enables the math library in bc. This option does the following:
+
+Sets the scale (decimal precision) to 20. By default, bc only performs integer arithmetic unless you specify the number of decimal places (scale). With -l, it automatically allows floating-point operations with a precision of 20 digits.
+
+It also loads several mathematical functions from the math library, such as:
+s(x) for sine of x.
+c(x) for cosine of x.
+l(x) for logarithm of x.
+sqrt(x) for square root of x.
+And other trigonometric and advanced mathematical functions.
+
+====================================================================================================================================
