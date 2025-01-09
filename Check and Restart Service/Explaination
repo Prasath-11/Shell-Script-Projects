@@ -1,0 +1,32 @@
+COMMAND - [systemctl is-active --quiet "$SERVICE_NAME"]
+Explaination :
+
+The command systemctl is-active --quiet "$SERVICE_NAME" is used to check the status of a service managed by systemd. Here's a detailed explanation of each part of the command:
+
+Breakdown of the command:
+
+1, systemctl:
+
+systemctl is a command-line utility used to interact with and manage system services and units on Linux systems using systemd (the system and service manager). It can control services (start, stop, restart, status, etc.) and other system-related tasks.
+It's the primary tool for managing services in modern Linux distributions that use systemd.
+
+2, is-active:
+
+is-active is an option (or subcommand) for systemctl that checks if a specific service is currently active (running).
+When you run systemctl is-active <service_name>, it returns the following:
+active if the service is running.
+inactive if the service is not running.
+failed if the service has failed (e.g., it crashed or didn't start properly).
+
+3, --quiet:
+
+The --quiet option suppresses the normal output of the systemctl is-active command.
+Without --quiet, systemctl is-active would print one of the statuses (active, inactive, or failed).
+By using --quiet, the command only sets the exit status (return code) based on whether the service is active or not. It does not output anything to the terminal. This is useful when you only care about the success or failure of the command, and you don't need the actual status printed.
+
+4, "$SERVICE_NAME":
+
+This is the name of the service you want to check (e.g., httpd, nginx, mysql, etc.).
+$SERVICE_NAME is a variable, and its value should be the name of the service you're interested in. For example, if $SERVICE_NAME="httpd", the command checks the status of the Apache HTTP server.
+
+====================================================================================================================================
