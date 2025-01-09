@@ -1,0 +1,91 @@
+COMMAND - [${WEBSITES[@]}]
+Explaination :
+
+The expression ${WEBSITES[@]} in Bash is used to refer to all elements in the array WEBSITES. Here's a detailed breakdown:
+
+1, ${WEBSITES[@]}:
+WEBSITES is an array in the script, defined as:
+
+${WEBSITES[@]} is used to expand all elements of the WEBSITES array. Each element of the array will be treated as a separate string.
+
+2, Difference Between ${WEBSITES[@]} and ${WEBSITES[*]}:
+
+Both ${WEBSITES[@]} and ${WEBSITES[*]} are used to refer to all elements in the array. However, there is a slight difference:
+
+${WEBSITES[@]}: Expands each element of the array as a separate word, preserving each array element individually.
+
+${WEBSITES[*]}: Expands the array as a single string, where all elements are joined into a single string, separated by the first character
+ of the IFS (Internal Field Separator), which is usually a space.
+
+=============================================================================================================================================
+
+COMMAND - [$(curl -s -o /dev/null -w "%{http_code}" "$WEBSITE")]
+Explaination :
+
+The command $(curl -s -o /dev/null -w "%{http_code}" "$WEBSITE") is used to perform an HTTP request to a website and capture the HTTP response status code. 
+Here’s a detailed breakdown of the command:
+
+1. $(...) (Command Substitution):
+
+The $(...) syntax is used for command substitution. It runs the command inside the parentheses and returns its output (standard output).
+In this case, the command inside the $(...) is curl, and the output of the curl command (the HTTP status code) is captured and returned by the whole expression.
+For example, $(curl ...) returns the HTTP status code, which is then assigned to the variable HTTP_STATUS.
+
+2. curl (Command-Line Tool for Transferring Data):
+
+curl is a command-line tool used for transferring data from or to a server, supporting various protocols such as HTTP, HTTPS, FTP, etc.
+In this case, curl is used to make an HTTP request to a given website URL ("$WEBSITE"), and we use several options to control the output.
+
+3. The Options Used with curl:
+
+3.1, -s (Silent Mode):
+
+The -s option stands for "silent" mode. It tells curl to operate without showing progress information, error messages, or other output, except for the content that is specifically requested.
+It suppresses the usual progress bar and any error messages (which could clutter the output).
+
+3.2, -o /dev/null (Discard the Output):
+
+The -o /dev/null option tells curl to discard the body of the HTTP response.
+curl would normally download the content of the website, but since we only care about the status code (not the content of the page), this option ensures that the body of the response is discarded and doesn't show up in the output.
+/dev/null is a special file that discards any input written to it (i.e., it "eats" the content).
+
+3.3, -w "%{http_code}" (Write HTTP Status Code):
+
+The -w option allows curl to output specific information about the request. The argument "%{http_code}" specifies that only the HTTP status code should be printed.
+The %{http_code} placeholder represents the HTTP status code of the response, such as 200 (OK), 404 (Not Found), 500 (Internal Server Error), etc.
+This option allows you to extract just the status code from the HTTP response.
+
+3.4, "$WEBSITE":
+
+This is the URL of the website you want to check. The "$WEBSITE" variable contains the actual URL (like http://example.com or https://example.com).
+The URL is passed as an argument to curl, which will make the request to that site.
+
+=============================================================================================================================================================================================================================================
+
+COMMAND - [|] (Pipe)
+
+Explaination:
+
+The pipe (|) takes the output of the echo command (the message) and sends it as input to the next command.
+
+==============================================================================================================
+
+COMMAND - [mail -s "Website Unreachable Alert" "$ALERT_EMAIL"]
+
+Explaination:
+
+mail is a command-line utility used to send emails.
+
+The syntax is: mail [options] [recipient].
+
+-s "Website Unreachable Alert":
+
+The -s option specifies the subject of the email. In this case, the subject of the email will be "Website Unreachable Alert".
+This means when the recipient receives the email, the subject line will display "Website Unreachable Alert".
+
+"$ALERT_EMAIL":
+
+This is the email address to which the alert will be sent. $ALERT_EMAIL is a variable that holds the email address specified in the script (e.g., your-email@example.com).
+The mail command will send the email to the address stored in this variable.
+
+=============================================================================================================================================================================
