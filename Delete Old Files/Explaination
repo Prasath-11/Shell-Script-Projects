@@ -1,0 +1,52 @@
+COMMAND - [find "$DIRECTORY" -type f -mtime +30 -exec echo {} \;]
+Explaination :
+
+This command searches for files that are older than 30 days in the specified directory and prints them (the echo part).
+
+find "$DIRECTORY": This tells find to search within the specified directory ($DIRECTORY).
+-type f: This restricts the search to files only (not directories).
+-mtime +30: This matches files that were modified more than 30 days ago.
+-exec echo {} \;: For each file that matches the search criteria, echo {} is executed. 
+{} is replaced by the path of the file found by find. The echo command simply prints the file's path to the terminal.
+
+This allows you to see the files that are older than 30 days before they are deleted.
+This command just prints the file paths for informational purposes and does not delete them yet.
+
+why \; at end:
+
+The backslash (\) at the end of the -exec echo {} \; command is used to escape the semicolon (;). Let’s break it down:
+
+Explanation of -exec echo {} \;:
+
+-exec: This option allows you to run a specified command on each file that find matches. The command to run is specified after -exec.
+echo {}: This part tells find to execute the echo command on each file it finds. The {} is a placeholder that gets replaced with the file's path.
+\;: The semicolon (;) is used to indicate the end of the command that find should execute for each file. However, the semicolon has special meaning in the shell and is used to separate commands.
+
+Why the backslash (\) is needed:
+
+In a shell script or command line, the semicolon (;) is used to separate different commands. 
+So, if you want to use a literal semicolon (;) as part of the find command (to indicate the end of the -exec command), you need to escape it using a backslash (\) to prevent the shell from interpreting it as a command separator.
+Without the backslash, the shell would treat the semicolon as the end of the find command or as a separator for different commands, leading to errors.
+
+==========================================================================================================================================================================================================================================
+
+COMMAND - find "$DIRECTORY" -type f -mtime +30 -exec rm -f {} \;
+Explaination:
+
+This command performs the same search as the previous one but instead of echoing the file names, it deletes them.
+
+find "$DIRECTORY": Searches in the specified directory.
+-type f: Restricts the search to files.
+-mtime +30: Matches files modified more than 30 days ago.
+-exec rm -f {} \;: For each file found, this executes the rm -f command to delete the file:
+rm -f: The rm command removes (deletes) the file, and the -f flag forces the deletion without prompting for confirmation.
+{} is replaced by the file path, so rm -f is applied to each file found.
+
+================================================================================================================================
+
+COMMAND - find "$DIRECTORY" -type f -mmin +120 -exec echo {} \;
+Explaination:
+
+Same command used for deleting files which are older than 2 hours.
+
+===================================================================================
