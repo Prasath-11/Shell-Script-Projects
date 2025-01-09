@@ -1,0 +1,109 @@
+COMMAND - [-z "$(ls "$DIRECTORY"/*.txt 2>/dev/null)"]
+explaination: 
+
+The command -z "$(ls "$DIRECTORY"/*.txt 2>/dev/null)" is used to check if there are any .txt files in the specified directory. 
+Let's break it down:
+
+Breakdown:
+1, ls "$DIRECTORY"/*.txt:
+
+This part of the command lists all files with the .txt extension in the specified directory ($DIRECTORY).
+If no .txt files are found, ls will normally print an error message, like ls: cannot access '/path/to/directory/*.txt': No such file or directory.
+However, the 2>/dev/null part redirects any error messages to /dev/null, which is essentially a "black hole" that discards them. So, if no .txt files are found, there will be no error message.
+
+2, $(...):
+
+This is command substitution, meaning the output of the command inside the parentheses (ls "$DIRECTORY"/*.txt 2>/dev/null) will be used as input to the outer command.
+If .txt files are found, the output will be a list of file paths (e.g., /path/to/directory/file1.txt /path/to/directory/file2.txt).
+If no .txt files are found, the result will be an empty string because ls produces no output, and the error is suppressed.
+
+3, -z:
+
+This is a test operator that checks if a string is empty. It returns true (or 0) if the string inside $(...) is empty.
+If the command ls "$DIRECTORY"/*.txt 2>/dev/null produces no output (i.e., no .txt files are found), the string passed to -z will be empty, and -z will return true.
+
+4, Overall Meaning:
+-z "$(ls "$DIRECTORY"/*.txt 2>/dev/null)" will be true if there are no .txt files in the specified directory. If there are .txt files, it will return false because the output of ls will not be empty.
+
+=========================================================================================================================================================================================================
+
+COMMAND - [$(basename "$FILE" .txt)]
+explaination:
+
+The command BASENAME=$(basename "$FILE" .txt) is used to extract the base name of a file from its full path, excluding the file extension (.txt). Let's break it down:
+
+Breakdown:
+
+basename "$FILE" .txt:
+
+basename is a command that extracts the "base" part of a file path, essentially removing any directory path information and optionally removing a specific suffix (like a file extension).
+
+The first argument to basename is the file path, represented by $FILE. This variable contains the full path of the file, including the directory and the file extension (e.g., /path/to/directory/example.txt).
+
+The second argument, .txt, is the suffix that will be removed from the end of the file name, if it exists. In this case, it will remove the .txt extension, leaving just the base file name (e.g., example).
+
+For example:
+
+If $FILE is /path/to/directory/example.txt, the result of basename "$FILE" .txt will be example.
+
+===================================================================================================================================================================================================================
+
+COMMAND - [$(realpath "$DIRECTORY")]
+explaination:
+
+The command DIRECTORY=$(realpath "$DIRECTORY") is used to convert a relative file path into an absolute file path. Here's a breakdown of each part of the command:
+
+Breakdown:
+realpath "$DIRECTORY":
+
+realpath is a command that resolves and returns the absolute path of a given file or directory. It will take a relative path (or even an absolute path) and provide the complete path from the root of the filesystem.
+
+For example:
+
+If "$DIRECTORY" is a relative path like ./myfolder, realpath will resolve it to an absolute path like /home/user/myfolder.
+If "$DIRECTORY" is already an absolute path like /home/user/myfolder, realpath will simply return /home/user/myfolder.
+This command is particularly useful when you want to ensure that you are working with a clear, unambiguous file path, regardless of whether the user provided a relative or absolute path.
+
+DIRECTORY=$(...):
+
+This is command substitution using $(). It runs the command inside the parentheses (realpath "$DIRECTORY") and assigns its output to the variable DIRECTORY.
+This means that the value of "$DIRECTORY" (whether it's relative or absolute) will be converted into an absolute path and stored back in the DIRECTORY variable.
+
+==========================================================================================================================================================================================================================
+
+COMMAND - [$(date "+%Y-%m-%d")]
+Explaination:
+
+This command gets the current date and stores it in the variable CURRENT_DATE. Here's how it works:
+
+date "+%Y-%m-%d":
+
+date is a command used to display or format the current date and time.
+The argument "+%Y-%m-%d" is a format string that specifies how the date should be displayed:
+
+%Y: The 4-digit year (e.g., 2024).
+%m: The 2-digit month (e.g., 12 for December).
+%d: The 2-digit day of the month (e.g., 02).
+
+When combined, date "+%Y-%m-%d" outputs the current date in the format YYYY-MM-DD, such as 2024-12-02.
+
+CURRENT_DATE=$(...):
+
+The $() syntax is command substitution, meaning the output of the command inside the parentheses is captured and assigned to the variable CURRENT_DATE.
+So, CURRENT_DATE will hold the current date in the format YYYY-MM-DD.
+
+=====================================================================================================================================================================
+
+COMMAND - [${1:-.}]
+Explaination:
+
+This command is used to assign a directory path to the variable DIRECTORY. Here's how it works:
+
+${1:-.}:
+This is a form of parameter expansion in Bash, often referred to as default value expansion.
+This is done using the syntax variable="${parameter:-default_value}". If $1 (the first argument passed to the script) is empty, it uses . (current directory) instead.
+$1 refers to the first positional parameter passed to the script. In other words, it is the first argument the user provides when running the script.
+:- is the operator that provides a default value if the variable ($1 in this case) is not set or is empty.
+. is the default value that will be used if $1 is not provided (i.e., if the script is run without any arguments).
+
+=======================================================================================================================================================================
