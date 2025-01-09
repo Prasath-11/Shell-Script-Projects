@@ -1,0 +1,40 @@
+COMMAND - [mkdir -p "$BACKUP_DIR"]
+Explaination :
+
+mkdir -p, which ensures that the parent directories are also created if they don't already exist.
+
+====================================================================================================
+
+COMMAND - [tar -czf "$BACKUP_FILE" -C "$SOURCE_DIR" .]
+Explaination:
+
+This line performs the actual backup and compression using the tar command:
+
+tar: The tool used for creating archive files.
+-czf: A combination of options:
+-c: Create a new archive.
+-z: Compress the archive using gzip.
+-f: Specify the filename of the archive (in this case, $BACKUP_FILE).
+"$BACKUP_FILE": The full path and filename of the backup file.
+
+-C "$SOURCE_DIR": This option tells tar to change the working directory to $SOURCE_DIR before creating the archive. 
+This means that the archive will contain the contents of the source directory, but it won’t include the full path leading to it. 
+It will only store the files and directories inside the source directory.
+
+.: This specifies the current directory (after the -C option), meaning it will archive all files and subdirectories within $SOURCE_DIR.
+
+====================================================================================================================================================
+
+COMMAND - [$?]
+Explaination :
+
+$? is a special variable that holds the exit status of the last command run.
+
+========================================================================================
+
+command - [tar -xzf backup_2024-12-07.tar.gz]
+Explaination :
+
+tar -xzf followed by filename to extract the compressed file.
+
+====================================================================
